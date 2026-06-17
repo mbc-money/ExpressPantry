@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Despensa Express — Menú semanal desde tu nevera</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+:root{
+  --bg:#F1ECE2;
+  --paper:#FFFDF8;
+  --ink:#211D1A;
+  --ink-soft:#5B5650;
+  --green:#3F6F4E;
+  --tomato:#C84B31;
+  --yolk:#E8A33D;
+  --line:#D9D2C2;
+  --radius:14px;
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font-family:'Work Sans', system-ui, sans-serif;
+  line-height:1.5;
+}
+.wrap{max-width:880px; margin:0 auto; padding:0 20px 80px;}
+
+a, button{font-family:inherit;}
+button{cursor:pointer;}
+:focus-visible{outline:3px solid var(--yolk); outline-offset:2px;}
+
+/* ---------- HERO ---------- */
+header.hero{
+  padding:56px 20px 40px;
+  text-align:left;
+}
+.eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--green);
+  font-weight:600;
+  display:inline-block;
+  border:1.5px solid var(--green);
+  padding:3px 10px;
+  border-radius:999px;
+  margin-bottom:18px;
+  transform:rotate(-1.2deg);
+}
+h1{
+  font-family:'Archivo Black', sans-serif;
+  font-size:clamp(28px, 5.4vw, 46px);
+  line-height:1.08;
+  margin:0 0 16px;
+  max-width:14ch;
+}
+.hero p{
+  font-size:17px;
+  color:var(--ink-soft);
+  max-width:46ch;
+  margin:0;
+}
+
+/* ---------- SECTIONS ---------- */
+section.step{
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:var(--radius);
+  padding:28px 24px;
+  margin-bottom:28px;
+  box-shadow:0 1px 0 rgba(33,29,26,.04);
+}
+.step-eyebrow{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--ink-soft);
+  margin:0 0 6px;
+}
+.step h2{
+  font-family:'Archivo Black', sans-serif;
+  font-size:22px;
+  margin:0 0 18px;
+}
+
+/* ---------- INPUT (PASO 1) ---------- */
+.field-row{display:flex; gap:18px; flex-wrap:wrap; margin-bottom:18px;}
+.field{flex:1; min-width:220px;}
+label.field-label{
+  display:block; font-size:13px; font-weight:600; margin-bottom:6px; color:var(--ink-soft);
+}
+.chip-input{
+  border:1.5px dashed var(--line);
+  border-radius:10px;
+  padding:10px;
+  min-height:54px;
+  display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+}
+.chip-input input{
+  border:none; outline:none; flex:1; min-width:140px; font-size:15px; padding:6px 4px; background:transparent; color:var(--ink);
+}
+.chip{
+  background:#EFE7D8;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:5px 8px 5px 12px;
+  font-size:14px;
+  display:flex; align-items:center; gap:6px;
+}
+.chip button{
+  background:none; border:none; color:var(--ink-soft); font-size:14px; line-height:1; padding:2px;
+}
+.chip button:hover{color:var(--tomato);}
+input[type="number"]{
+  width:100%;
+  border:1.5px solid var(--line);
+  border-radius:10px;
+  padding:11px 12px;
+  font-size:15px;
+  font-family:'IBM Plex Mono', monospace;
+  color:var(--ink);
+}
+.hint{font-size:13px; color:var(--ink-soft); margin-top:8px;}
+
+.stamp-btn{
+  background:var(--ink);
+  color:var(--paper);
+  border:none;
+  font-family:'IBM Plex Mono', monospace;
+  font-weight:600;
+  font-size:14px;
+  letter-spacing:.04em;
+  text-transform:uppercase;
+  padding:14px 22px;
+  border-radius:8px;
+  transition:transform .15s ease, background .15s ease;
+}
+.stamp-btn:hover{transform:rotate(-1deg) scale(1.02); background:#3a332c;}
+.stamp-btn:active{transform:rotate(0) scale(.98);}
+.stamp-btn.ghost{
+  background:transparent; color:var(--ink); border:1.5px solid var(--ink);
+}
+
+/* ---------- MENUS (PASO 2) ---------- */
+#menusGrid{display:grid; gap:18px; grid-template-columns:1fr;}
+@media(min-width:680px){ #menusGrid{grid-template-columns:1fr 1fr;} }
+
+.menu-card{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:18px;
+  background:#FFFFFF;
+}
+.menu-day{
+  font-family:'IBM Plex Mono', monospace;
+  font-size:12px; letter-spacing:.1em; text-transform:uppercase; color:var(--green); font-weight:600;
+}
+.menu-name{font-size:18px; font-weight:700; margin:4px 0 12px;}
+.pill-row{display:flex; gap:8px; margin-bottom:14px;}
+.pill{
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:'IBM Plex Mono', monospace; font-size:12px;
+  background:#F1ECE2; border-radius:999px; padding:4px 10px; color:var(--ink-soft);
+}
+.pill svg{width:13px; height:13px;}
+
+.ing-list{list-style:none; margin:0 0 14px; padding:0; font-size:14px;}
+.ing-list li{display:flex; align-items:center; gap:7px; padding:4px 0; border-bottom:1px dotted var(--line);}
+.ing-list li:last-child{border-bottom:none;}
+.ing-list svg{width:14px; height:14px; flex-shrink:0;}
+.ing-owned{color:var(--green);}
+.ing-missing{color:var(--tomato);}
+.ing-qty{margin-left:auto; font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft);}
+
+.qg-toggle{
+  width:100%;
+  background:#F1ECE2;
+  border:1px solid var(--line);
+  border-radius:8px;
+  padding:9px 12px;
+  font-size:13px;
+  font-weight:600;
+  display:flex; align-items:center; justify-content:center; gap:6px;
+}
+.qg-toggle:hover{background:#E9E1D2;}
+.qg-panel{margin-top:12px; padding-top:12px; border-top:1px dashed var(--line);}
+.qg-panel[hidden]{display:none;}
+.qg-bar-track{height:6px; background:var(--line); border-radius:999px; overflow:hidden; margin-bottom:10px;}
+.qg-bar{height:100%; width:0%; background:var(--yolk);}
+.qg-step{font-size:15px; font-weight:600; min-height:42px;}
+.qg-counter{font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-soft); margin-top:6px;}
+.qg-note{font-size:11.5px; color:var(--ink-soft); margin-top:10px;}
+
+/* ---------- SHOPPING RECEIPT (PASO 3) ---------- */
+.receipt-wrap{display:flex; justify-content:center;}
+.receipt{
+  width:100%; max-width:380px;
+  background:var(--paper);
+  border:1px solid var(--line);
+  border-radius:4px;
+  padding:22px 22px 28px;
+  font-family:'IBM Plex Mono', monospace;
+  position:relative;
+  overflow:hidden;
+  max-height:0;
+  transition:max-height .7s ease;
+}
+.receipt-title{font-size:14px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; text-align:center; margin-bottom:4px;}
+.receipt-sub{font-size:11px; color:var(--ink-soft); text-align:center; margin-bottom:14px;}
+.perforation{
+  height:6px; margin:0 -22px 14px;
+  background-image:radial-gradient(circle, var(--bg) 2px, transparent 2.2px);
+  background-size:10px 10px;
+}
+.receipt-list{list-style:none; margin:0 0 14px; padding:0; font-size:13px;}
+.receipt-list li{
+  display:flex; justify-content:space-between; gap:10px;
+  padding:5px 0; border-bottom:1px dotted var(--line);
+  opacity:0; transform:translateY(-4px);
+  animation:lineIn .35s ease forwards;
+}
+.receipt-list li span:first-child{flex:1;}
+.receipt-total{display:flex; justify-content:space-between; font-size:13px; font-weight:700; padding-top:10px;}
+.barcode{
+  height:34px; margin-top:18px;
+  background:repeating-linear-gradient(90deg, var(--ink) 0 2px, transparent 2px 4px, var(--ink) 4px 5px, transparent 5px 9px);
+}
+.receipt-empty-note{font-size:12px; color:var(--ink-soft); text-align:center; padding:10px 0;}
+
+@keyframes lineIn{ to{opacity:1; transform:translateY(0);} }
+
+.actions-row{display:flex; gap:10px; justify-content:center; margin-top:18px; flex-wrap:wrap;}
+
+footer{
+  text-align:center; font-size:12.5px; color:var(--ink-soft); padding:30px 20px 10px;
+}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:.001s !important; transition-duration:.001s !important;}
+}
+
+@media print{
+  header.hero, #step1, #step2, .actions-row, footer{display:none !important;}
+  body{background:#fff;}
+  .receipt{max-height:none !important; box-shadow:none; border:none;}
+}
+
+[hidden]{display:none !important;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap" style="padding:0;">
+    <span class="eyebrow">Despensa Express</span>
+    <h1>Lo que tienes en la nevera decide el menú de la semana</h1>
+    <p>Escribe lo que ya tienes, dinos para cuántos comensales cocinas y te devolvemos 5 menús sanos de lunes a viernes, con la lista exacta de lo que falta comprar.</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="step" id="step1">
+    <p class="step-eyebrow">Paso 1</p>
+    <h2>Qué tienes en la nevera</h2>
+
+    <div class="field-row">
+      <div class="field" style="flex:2;">
+        <label class="field-label" for="ingredientInput">Ingredientes disponibles</label>
+        <div class="chip-input" id="chipInputBox">
+          <div id="chipsList"></div>
+          <input type="text" id="ingredientInput" placeholder="Escribe un ingrediente y pulsa Enter o coma…">
+        </div>
+        <p class="hint">Cuantos más añadas, más exacta será la lista de la compra. Ej: pollo, huevos, espinacas, arroz integral, tomate.</p>
+      </div>
+      <div class="field" style="flex:1;">
+        <label class="field-label" for="servingsInput">Comensales</label>
+        <input type="number" id="servingsInput" min="1" max="8" value="2">
+        <p class="hint">Las cantidades de la compra se ajustan a este número.</p>
+      </div>
+    </div>
+
+    <button class="stamp-btn" id="generateBtn">Generar mi menú semanal</button>
+    <p class="hint" id="emptyHint" hidden>Sin ingredientes todavía: te mostramos 5 menús rápidos y la lista de la compra completa.</p>
+  </section>
+
+  <section class="step" id="step2" hidden>
+    <p class="step-eyebrow">Paso 2</p>
+    <h2>Tus 5 menús de la semana</h2>
+    <div id="menusGrid"></div>
+  </section>
+
+  <section class="step" id="step3" hidden>
+    <p class="step-eyebrow">Paso 3</p>
+    <h2>La compra exacta — solo lo que falta</h2>
+    <div class="receipt-wrap">
+      <div class="receipt" id="receipt">
+        <p class="receipt-title">Lista de la compra</p>
+        <p class="receipt-sub" id="receiptDate"></p>
+        <div class="perforation"></div>
+        <ul class="receipt-list" id="receiptList"></ul>
+        <div class="receipt-total" id="receiptTotal"></div>
+        <div class="barcode"></div>
+      </div>
+    </div>
+    <div class="actions-row">
+      <button class="stamp-btn ghost" id="printBtn">Imprimir lista</button>
+      <button class="stamp-btn ghost" id="resetBtn">Empezar de nuevo</button>
+    </div>
+  </section>
+
+</div>
+
+<footer>
+  Las cantidades se calculan al gramo según las recetas elegidas y los comensales, para que no compres de más. La «guía rápida» es un resumen de lectura en 30 segundos, no un vídeo.
+</footer>
+
+<script>
+// ---------- ICONS ----------
+const ICONS = {
+  clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg>',
+  flame:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21c4 0 7-2.5 7-6.5 0-2.5-1.3-4-2.3-5.2.2 2-1 3-1.7 2.2.6-3-1-5.5-3-6.5.6 2.5-.3 4-1.7 5.3C8.6 11.5 8 13 8 14.5 8 18.5 9 21 12 21z"/></svg>',
+  cart:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M3 4h2l2.3 12.2a2 2 0 0 0 2 1.6h7.5a2 2 0 0 0 2-1.6L21 8H6.2"/></svg>',
+  check:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>'
+};
+
+// ---------- RECIPE DATABASE ----------
+const RECIPES = [
+  {id:'tortilla-espinacas', name:'Tortilla de espinacas y champiñones', kcal:320, prep:10,
+   ing:[{n:'huevo',q:2,u:'ud'},{n:'espinacas',q:80,u:'g'},{n:'champiñones',q:60,u:'g'},{n:'cebolla',q:30,u:'g'},{n:'aceite de oliva',q:5,u:'ml'},{n:'sal',q:1,u:'g'}],
+   steps:['Bate los huevos con una pizca de sal.','Saltea cebolla y champiñones 3 min en aceite.','Añade las espinacas hasta que reduzcan.','Vierte el huevo y cuaja la tortilla 2 min por lado.']},
+
+  {id:'pollo-verduras', name:'Pollo a la plancha con verduras salteadas', kcal:380, prep:15,
+   ing:[{n:'pechuga de pollo',q:150,u:'g'},{n:'calabacín',q:100,u:'g'},{n:'pimiento rojo',q:80,u:'g'},{n:'ajo',q:5,u:'g'},{n:'aceite de oliva',q:5,u:'ml'},{n:'pimienta',q:1,u:'g'}],
+   steps:['Corta el pollo en tiras y sazona con pimienta.','Saltea calabacín y pimiento con ajo 4 min.','Añade el pollo y cocina 6 min hasta dorar.','Mezcla todo y sirve caliente.']},
+
+  {id:'salmon-brocoli', name:'Salmón al horno con brócoli y patata', kcal:420, prep:20,
+   ing:[{n:'salmón',q:150,u:'g'},{n:'brócoli',q:120,u:'g'},{n:'patata',q:150,u:'g'},{n:'limón',q:1,u:'ud'},{n:'aceite de oliva',q:5,u:'ml'},{n:'sal',q:1,u:'g'}],
+   steps:['Precalienta el horno a 200°C.','Coloca salmón, brócoli y patata en una bandeja con aceite.','Hornea 15 min hasta que el salmón esté hecho.','Sirve con un toque de limón.']},
+
+  {id:'ensalada-garbanzos-atun', name:'Ensalada de garbanzos con atún', kcal:350, prep:8,
+   ing:[{n:'garbanzos cocidos',q:150,u:'g'},{n:'atún en lata',q:80,u:'g'},{n:'tomate',q:100,u:'g'},{n:'cebolla',q:30,u:'g'},{n:'aceite de oliva',q:8,u:'ml'},{n:'vinagre',q:5,u:'ml'}],
+   steps:['Escurre los garbanzos y el atún.','Corta el tomate y la cebolla en dados.','Mezcla todo en un bol.','Aliña con aceite y vinagre.']},
+
+  {id:'wok-tofu', name:'Wok de tofu con verduras y arroz integral', kcal:400, prep:18,
+   ing:[{n:'tofu',q:120,u:'g'},{n:'arroz integral',q:60,u:'g'},{n:'zanahoria',q:60,u:'g'},{n:'pimiento',q:60,u:'g'},{n:'salsa de soja',q:10,u:'ml'},{n:'jengibre',q:5,u:'g'}],
+   steps:['Corta el tofu en dados y las verduras en tiras.','Cuece el arroz integral según el envase.','Saltea el tofu y las verduras con jengibre 5 min.','Añade la salsa de soja y el arroz, mezcla 2 min.']},
+
+  {id:'pasta-tomate-atun', name:'Pasta integral con tomate y atún', kcal:410, prep:15,
+   ing:[{n:'pasta integral',q:80,u:'g'},{n:'tomate triturado',q:150,u:'g'},{n:'atún en lata',q:80,u:'g'},{n:'ajo',q:5,u:'g'},{n:'aceite de oliva',q:5,u:'ml'},{n:'orégano',q:1,u:'g'}],
+   steps:['Cuece la pasta integral según el envase.','Sofríe el ajo y añade el tomate triturado.','Incorpora el atún escurrido y el orégano.','Mezcla con la pasta cocida y sirve.']},
+
+  {id:'revuelto-calabacin', name:'Revuelto de huevos con calabacín', kcal:300, prep:8,
+   ing:[{n:'huevo',q:2,u:'ud'},{n:'calabacín',q:100,u:'g'},{n:'queso fresco',q:30,u:'g'},{n:'aceite de oliva',q:5,u:'ml'},{n:'sal',q:1,u:'g'}],
+   steps:['Corta el calabacín en rodajas finas.','Saltea el calabacín en aceite 4 min.','Bate los huevos y viértelos sobre el calabacín.','Añade el queso fresco y cuaja a fuego bajo.']},
+
+  {id:'lentejas-zanahoria', name:'Lentejas estofadas con zanahoria', kcal:380, prep:20,
+   ing:[{n:'lentejas cocidas',q:200,u:'g'},{n:'zanahoria',q:80,u:'g'},{n:'cebolla',q:40,u:'g'},{n:'tomate',q:60,u:'g'},{n:'comino',q:1,u:'g'},{n:'aceite de oliva',q:5,u:'ml'}],
+   steps:['Pica la cebolla y la zanahoria finamente.','Sofríe con comino 3 min.','Añade las lentejas cocidas y el tomate.','Cocina 8 min a fuego medio.']},
+
+  {id:'quinoa-pollo-pimientos', name:'Quinoa con pollo y pimientos', kcal:420, prep:18,
+   ing:[{n:'quinoa',q:60,u:'g'},{n:'pechuga de pollo',q:120,u:'g'},{n:'pimiento rojo',q:70,u:'g'},{n:'pimiento verde',q:70,u:'g'},{n:'aceite de oliva',q:5,u:'ml'},{n:'comino',q:1,u:'g'}],
+   steps:['Cuece la quinoa según el envase.','Corta el pollo y los pimientos en tiras.','Saltea el pollo con comino hasta dorar.','Añade los pimientos y la quinoa, mezcla 3 min.']},
+
+  {id:'merluza-judias', name:'Merluza al vapor con judías verdes', kcal:320, prep:15,
+   ing:[{n:'merluza',q:150,u:'g'},{n:'judías verdes',q:120,u:'g'},{n:'patata',q:100,u:'g'},{n:'limón',q:1,u:'ud'},{n:'aceite de oliva',q:5,u:'ml'}],
+   steps:['Cuece al vapor las judías y la patata 10 min.','Añade la merluza al vapor 6 min más.','Emplata las verduras y el pescado.','Riega con aceite y limón.']},
+
+  {id:'tacos-lechuga-pavo', name:'Tacos de lechuga con pavo picado', kcal:340, prep:12,
+   ing:[{n:'pavo picado',q:130,u:'g'},{n:'lechuga',q:80,u:'g'},{n:'tomate',q:60,u:'g'},{n:'cebolla',q:30,u:'g'},{n:'aguacate',q:50,u:'g'},{n:'lima',q:1,u:'ud'}],
+   steps:['Dora el pavo picado en una sartén 6 min.','Corta el tomate, la cebolla y el aguacate.','Lava y separa hojas grandes de lechuga.','Rellena las hojas con el pavo y las verduras.']},
+
+  {id:'crema-calabaza', name:'Crema de calabaza con pipas', kcal:260, prep:20,
+   ing:[{n:'calabaza',q:200,u:'g'},{n:'cebolla',q:40,u:'g'},{n:'caldo de verduras',q:200,u:'ml'},{n:'pipas de calabaza',q:10,u:'g'},{n:'aceite de oliva',q:5,u:'ml'}],
+   steps:['Corta la calabaza y la cebolla en trozos.','Cocina con el caldo 15 min hasta que ablanden.','Tritura hasta obtener una crema fina.','Sirve con pipas de calabaza por encima.']},
+
+  {id:'arroz-gambas-guisantes', name:'Arroz integral con gambas y guisantes', kcal:410, prep:18,
+   ing:[{n:'arroz integral',q:70,u:'g'},{n:'gambas',q:120,u:'g'},{n:'guisantes',q:60,u:'g'},{n:'ajo',q:5,u:'g'},{n:'aceite de oliva',q:5,u:'ml'},{n:'pimentón',q:1,u:'g'}],
+   steps:['Cuece el arroz integral según el envase.','Saltea ajo y pimentón, añade las gambas 3 min.','Incorpora los guisantes 2 min más.','Mezcla con el arroz y sirve.']},
+
+  {id:'burrito-bowl-alubias', name:'Burrito bowl de alubias negras', kcal:430, prep:12,
+   ing:[{n:'alubias negras cocidas',q:150,u:'g'},{n:'arroz integral',q:60,u:'g'},{n:'maíz',q:50,u:'g'},{n:'tomate',q:60,u:'g'},{n:'aguacate',q:50,u:'g'},{n:'lima',q:1,u:'ud'}],
+   steps:['Cuece el arroz integral según el envase.','Calienta las alubias negras y el maíz.','Corta el tomate y el aguacate en dados.','Monta el bowl con todo y un toque de lima.']},
+
+  {id:'pisto-huevo', name:'Pisto de verduras con huevo', kcal:310, prep:18,
+   ing:[{n:'calabacín',q:80,u:'g'},{n:'berenjena',q:80,u:'g'},{n:'pimiento',q:60,u:'g'},{n:'tomate',q:100,u:'g'},{n:'huevo',q:1,u:'ud'},{n:'aceite de oliva',q:8,u:'ml'}],
+   steps:['Corta el calabacín, la berenjena y el pimiento en dados.','Sofríe las verduras 10 min a fuego medio.','Añade el tomate y cocina 5 min más.','Casca el huevo encima y cuaja a fuego bajo.']}
+];
+
+const WEEKDAYS = ['Lunes','Martes','Miércoles','Jueves','Viernes'];
+
+// ---------- STATE ----------
+let chips = [];
+
+// ---------- HELPERS ----------
+function normalize(s){
+  return s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').trim();
+}
+function isOwned(ingName, ownedNorm){
+  const n = normalize(ingName);
+  return ownedNorm.some(o => n.includes(o) || o.includes(n));
+}
+
+// ---------- CHIP INPUT ----------
+const chipsListEl = document.getElementById('chipsList');
+const ingredientInput = document.getElementById('ingredientInput');
+
+function renderChips(){
+  chipsListEl.innerHTML = '';
+  chips.forEach((c, i) => {
+    const span = document.createElement('span');
+    span.className = 'chip';
+    span.innerHTML = c + ' <button type="button" aria-label="Quitar ' + c + '">✕</button>';
+    span.querySelector('button').addEventListener('click', () => { chips.splice(i,1); renderChips(); });
+    chipsListEl.appendChild(span);
+  });
+}
+chipsListEl.style.display = 'contents';
+
+function addChipFromInput(){
+  const raw = ingredientInput.value.replace(/,$/,'').trim();
+  if(!raw) return;
+  if(!chips.some(c => normalize(c) === normalize(raw))) {
+    chips.push(raw);
+    renderChips();
+  }
+  ingredientInput.value = '';
+}
+ingredientInput.addEventListener('keydown', (e) => {
+  if(e.key === 'Enter' || e.key === ','){
+    e.preventDefault();
+    addChipFromInput();
+  }
+});
+ingredientInput.addEventListener('blur', addChipFromInput);
+
+// ---------- GENERATE ----------
+document.getElementById('generateBtn').addEventListener('click', () => {
+  addChipFromInput();
+  const servings = Math.max(1, Math.min(8, parseInt(document.getElementById('servingsInput').value) || 2));
+  const ownedNorm = chips.map(normalize);
+
+  document.getElementById('emptyHint').hidden = chips.length > 0;
+
+  const scored = RECIPES.map(r => {
+    const matched = r.ing.filter(i => isOwned(i.n, ownedNorm));
+    return Object.assign({}, r, { matchedCount: matched.length, score: matched.length / r.ing.length });
+  });
+  scored.sort((a,b) => (b.score - a.score) || (a.prep - b.prep));
+  const chosen = scored.slice(0, 5);
+
+  renderMenus(chosen, ownedNorm);
+  renderShoppingList(buildShoppingList(chosen, ownedNorm, servings));
+
+  document.getElementById('step2').hidden = false;
+  document.getElementById('step3').hidden = false;
+  document.getElementById('step2').scrollIntoView({behavior:'smooth', block:'start'});
+});
+
+function renderMenus(chosen, ownedNorm){
+  const grid = document.getElementById('menusGrid');
+  grid.innerHTML = '';
+  chosen.forEach((r, idx) => {
+    const card = document.createElement('div');
+    card.className = 'menu-card';
+    const ingHtml = r.ing.map(i => {
+      const owned = isOwned(i.n, ownedNorm);
+      return '<li class="' + (owned ? 'ing-owned' : 'ing-missing') + '">' +
+        (owned ? ICONS.check : ICONS.cart) +
+        '<span>' + i.n + '</span>' +
+        '<span class="ing-qty">' + i.q + ' ' + i.u + '</span></li>';
+    }).join('');
+
+    card.innerHTML =
+      '<p class="menu-day">' + (WEEKDAYS[idx] || ('Día ' + (idx+1))) + '</p>' +
+      '<p class="menu-name">' + r.name + '</p>' +
+      '<div class="pill-row">' +
+        '<span class="pill">' + ICONS.flame + r.kcal + ' kcal</span>' +
+        '<span class="pill">' + ICONS.clock + r.prep + ' min</span>' +
+      '</div>' +
+      '<ul class="ing-list">' + ingHtml + '</ul>' +
+      '<button class="qg-toggle" type="button">Ver guía rápida (30s)</button>' +
+      '<div class="qg-panel" hidden>' +
+        '<div class="qg-bar-track"><div class="qg-bar"></div></div>' +
+        '<p class="qg-step"></p>' +
+        '<p class="qg-counter"></p>' +
+        '<p class="qg-note">Resumen de lectura en 30 segundos para repasar los pasos mientras cocinas — no es un vídeo.</p>' +
+      '</div>';
+
+    const toggleBtn = card.querySelector('.qg-toggle');
+    const panel = card.querySelector('.qg-panel');
+    toggleBtn.addEventListener('click', () => {
+      const opening = panel.hidden;
+      panel.hidden = !opening;
+      toggleBtn.textContent = opening ? 'Cerrar guía rápida' : 'Ver guía rápida (30s)';
+      if(opening){ startQuickGuide(panel, r.steps); }
+      else { stopQuickGuide(panel); }
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function startQuickGuide(panel, steps){
+  stopQuickGuide(panel);
+  let idx = 0;
+  const stepMs = 30000 / steps.length;
+  const stepEl = panel.querySelector('.qg-step');
+  const counterEl = panel.querySelector('.qg-counter');
+  const barEl = panel.querySelector('.qg-bar');
+
+  function show(){
+    stepEl.textContent = steps[idx];
+    counterEl.textContent = (idx+1) + ' / ' + steps.length;
+  }
+  show();
+  barEl.style.transition = 'none';
+  barEl.style.width = '0%';
+  requestAnimationFrame(() => {
+    barEl.style.transition = 'width 30s linear';
+    barEl.style.width = '100%';
+  });
+  panel._qgInterval = setInterval(() => {
+    idx++;
+    if(idx >= steps.length){
+      clearInterval(panel._qgInterval);
+      stepEl.textContent = '¡Listo! A comer.';
+      counterEl.textContent = '✓';
+      return;
+    }
+    show();
+  }, stepMs);
+}
+function stopQuickGuide(panel){
+  if(panel._qgInterval) clearInterval(panel._qgInterval);
+  const barEl = panel.querySelector('.qg-bar');
+  if(barEl){ barEl.style.transition = 'none'; barEl.style.width = '0%'; }
+}
+
+function buildShoppingList(chosen, ownedNorm, servings){
+  const map = new Map();
+  chosen.forEach(r => {
+    r.ing.forEach(i => {
+      if(isOwned(i.n, ownedNorm)) return;
+      const key = i.n + '|' + i.u;
+      const qty = i.q * servings;
+      map.set(key, (map.get(key) || 0) + qty);
+    });
+  });
+  return map;
+}
+
+function renderShoppingList(map){
+  const listEl = document.getElementById('receiptList');
+  const totalEl = document.getElementById('receiptTotal');
+  const receiptEl = document.getElementById('receipt');
+  const dateEl = document.getElementById('receiptDate');
+
+  dateEl.textContent = new Date().toLocaleDateString('es-ES', {day:'2-digit', month:'long', year:'numeric'});
+  listEl.innerHTML = '';
+
+  if(map.size === 0){
+    listEl.innerHTML = '<li class="receipt-empty-note" style="display:block; border:none;">Ya tienes todo lo necesario. No falta comprar nada.</li>';
+  } else {
+    const entries = Array.from(map.entries()).sort((a,b) => a[0].localeCompare(b[0]));
+    entries.forEach(([key, qty], i) => {
+      const [name, unit] = key.split('|');
+      const li = document.createElement('li');
+      li.style.animationDelay = (i * 70) + 'ms';
+      li.innerHTML = '<span>' + name + '</span><span>' + Math.round(qty) + ' ' + unit + '</span>';
+      listEl.appendChild(li);
+    });
+  }
+  totalEl.textContent = 'Artículos a comprar: ' + map.size;
+
+  receiptEl.style.maxHeight = '0px';
+  requestAnimationFrame(() => {
+    setTimeout(() => { receiptEl.style.maxHeight = receiptEl.scrollHeight + 'px'; }, 50);
+  });
+}
+
+// ---------- PRINT / RESET ----------
+document.getElementById('printBtn').addEventListener('click', () => window.print());
+document.getElementById('resetBtn').addEventListener('click', () => {
+  chips = [];
+  renderChips();
+  document.getElementById('servingsInput').value = 2;
+  document.getElementById('step2').hidden = true;
+  document.getElementById('step3').hidden = true;
+  document.getElementById('emptyHint').hidden = true;
+  document.getElementById('step1').scrollIntoView({behavior:'smooth'});
+});
+</script>
+</body>
+</html>
